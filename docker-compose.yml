@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  jupyter:
+    build: .
+    # Mapeia as portas para você acessar no localhost do navegador
+    ports:
+      - "8888:8888"
+    # Faz um "espelho" entre a sua pasta no Linux e a do Docker
+    # Tudo que você mudar no VS Code vai aparecer na mesma hora no JupyterLab, e vice-versa!
+    volumes:
+      - .:/app
+    # Evita que a pasta venv local do seu PC se misture com as bibliotecas do Docker Linux
+    environment:
+      - JUPYTER_TOKEN=senha123
+
+  # Esse serviço roda a pipeline inteira (make_dataset, build_features, visualize) num comando só 
+  # Executado usando: docker compose run pipeline
+  pipeline:
+    build: .
+    volumes:
+      - .:/app
+    # Roda os 3 scripts em sequência e desliga o container
+    command: >
+      sh -c "python src/data/make_dataset.py && 
+             python src/features/build_features.py && 
+             python src/visualization/visualize.py"

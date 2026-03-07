@@ -1,0 +1,8 @@
+.venv/
+legacy/
+data/raw/*
+data/processed/*
+__pycache__/
+*.pyc
+*.pyo
+.git/
